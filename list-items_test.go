@@ -7,19 +7,43 @@ import (
 )
 
 func TestListItems(t *testing.T) {
-	t.Parallel()
-
-	input := []string{
-		"a battery",
-		"a key",
-		"a tourist map",
+	type testCase struct {
+		input []string
+		want  string
 	}
 
-	want := "You can see here a battery, a key, and a tourist map."
-	got := ListItems(input)
+	cases := []testCase{
+		{
+			input: []string{
+				"a battery",
+				"a key",
+				"a tourist map",
+			},
+			want: "You can see here a battery, a key, and a tourist map.",
+		},
+		{
+			input: []string{
+				"a battery",
+				"a key",
+			},
+			want: "You can see here a battery and a key.",
+		},
+		{
+			input: []string{
+				"a battery",
+			},
+			want: "You can see a battery here.",
+		},
+		{
+			input: []string{},
+			want:  "",
+		},
+	}
 
-	if want != got {
-		// t.Errorf("want %q, got %q", want, got)
-		t.Error(cmp.Diff(want, got))
+	for _, tc := range cases {
+		got := ListItems(tc.input)
+		if tc.want != got {
+			t.Error(cmp.Diff(tc.want, got))
+		}
 	}
 }
